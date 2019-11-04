@@ -20,9 +20,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <EditTextPreference android:title="@string/url"
+    <EditTextPreference
+        android:title="@string/url"
         android:key="url"
+        android:defaultValue="https://www.google.ch"
         android:summary="@string/enter_url"></EditTextPreference>
 
+    <EditTextPreference
+        android:title="Aktualisierungsintervall"
+        android:key="refreshTime"
+        android:defaultValue="30"
+        android:summary="Ansicht nach aktualisieren in X Minuten"/>
 
 </PreferenceScreen>

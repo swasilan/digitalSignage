@@ -17,9 +17,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
-    public static final String KEY_PREF_URL = "url";
     WebView simpleWebView;
     String url = "https://docs.google.com/presentation/d/e/2PACX-1vQWPgB5C3Veqx0LFOCumv_dIkmjYr5u5VsE9Fm4JNqdmV_GjEPBXCyVrPX3Giec9-gXf2mm-A1viCG6/pub?start=true&loop=true&delayms=5000";
+    int refreshTime;
     private Timer myTimer;
 
     @Override
@@ -29,7 +29,9 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences sharedPref =
                 PreferenceManager.getDefaultSharedPreferences(this);
-        url = sharedPref.getString(SettingsActivity.KEY_PREF_URL, "https://www.google.ch");
+
+        url = sharedPref.getString(SettingsActivity.KEY_PREF_URL, "https://www.google.ch" );
+        refreshTime = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_REFRESH_TIME, "30"));
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -38,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
         simpleWebView = (WebView) findViewById(R.id.simpleWebView);
 
-        simpleWebView.setWebViewClient(new MyWebViewClient());
+        simpleWebView.setWebViewClient(new DigitalSignage());
 
         simpleWebView.setOnTouchListener(new View.OnTouchListener() {
             boolean settingsVisible = false;
@@ -58,13 +60,15 @@ public class MainActivity extends AppCompatActivity {
         simpleWebView.loadUrl(url); // load a web page in a web view
 
         myTimer = new Timer();
-        myTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                TimerMethod();
-            }
+        if(refreshTime > 0) {
+            myTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    TimerMethod();
+                }
 
-        }, 0, 60 * 1000);
+            }, 0, refreshTime * 60 * 1000);
+        }
     }
 
     private void TimerMethod()
@@ -86,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private class MyWebViewClient extends WebViewClient {
+    private class DigitalSignage extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             view.loadUrl(url);

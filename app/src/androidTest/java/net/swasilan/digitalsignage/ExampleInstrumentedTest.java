@@ -22,6 +22,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        assertEquals("com.example.mywebviewapp", appContext.getPackageName());
+        assertEquals("net.swasilan.digitalsignage", appContext.getPackageName());
     }
 }
